@@ -7,7 +7,7 @@ from PIL import Image
 from zipfile import ZipFile
 # import pandas_profiling as pp
 
-# Data Viz Pkgs
+# 視覺化套件
 import matplotlib
 matplotlib.use('Agg')# To Prevent Errors
 import matplotlib.pyplot as plt
@@ -15,13 +15,14 @@ import seaborn as sns
 
 
 def main():
-	"""Common ML Data Explorer """
-	st.title("Common ML Dataset Explorer")
-	st.subheader("Simple DataScience App with Streamlit")
+	"""資料探勘App"""
+	st.title("資料探勘App")
+	st.subheader("製作第一個Data App")
 
 	html_temp = """
-	<div style="background-color:tomato;"><p style="color:white;font-size:60px;"> Streamlit is Awesome</p></div>
+	<div style="background-color:tomato;"><p style="color:white;font-size:40px;"> App by Streamlit</p></div>
 	"""
+
 	st.markdown(html_temp,unsafe_allow_html=True)
 
 	# img_list = glob.glob("images/*.png")
@@ -31,26 +32,27 @@ def main():
 	# # 	st.image(i)
 	# all_image = [Image.open(i) for i in img_list]
 	# st.image(all_image)
-	
+
+	# 讀取資料路徑的函數
 	def file_selector(folder_path='./datasets'):
 	    filenames = os.listdir(folder_path)
 	    selected_filename = st.selectbox('Select a file', filenames)
 	    return os.path.join(folder_path, selected_filename)
-
+	# 
 	filename = file_selector()
 	st.write('You selected `%s`' % filename)
 	df = pd.read_csv(filename)	
 
-	# Show Dataset
-	if st.checkbox("Show DataSet"):
+	# 顯示資料集
+	if st.checkbox("顯示資料集"):
 		number = st.number_input("Number of Rows to View")
 		st.dataframe(df.head(number))
-	# Show Column Names
-	if st.button("Columns Names"):
+	# 顯示欄位
+	if st.button("顯示欄位"):
 		st.write(df.columns)
 
 	# Show Shape of Dataset
-	if st.checkbox("Shape of Dataset"):
+	if st.checkbox("資料集維度"):
 		st.write(df.shape)
 		data_dim = st.radio("Show Dimension by",("Rows","Columns"))
 		if data_dim == 'Rows':
@@ -60,23 +62,23 @@ def main():
 			st.text("Number of Columns")
 			st.write(df.shape[1])
 	# Show Columns By Selection
-	if st.checkbox("Select Columns To Show"):
+	if st.checkbox("顯示選擇欄位"):
 		all_columns = df.columns.tolist()
 		selected_columns = st.multiselect('Select',all_columns)
 		new_df = df[selected_columns]
 		st.dataframe(new_df)
 
 	# Datatypes
-	if st.button("Data Types"):
+	if st.button("資料型態"):
 		st.write(df.dtypes)
 
 	# Value Counts
-	if st.button("Value Counts"):
+	if st.button("計數"):
 		st.text("Value Counts By Target/Class")
 		st.write(df.iloc[:,-1].value_counts())
 
 	# Summary
-	if st.checkbox("Summary"):
+	if st.checkbox("摘要"):
 		st.write(df.describe())
 	
 	st.subheader("Data Visualization")
